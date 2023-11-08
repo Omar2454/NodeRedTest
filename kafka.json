@@ -1,0 +1,510 @@
+[
+    {
+        "id": "02bc6bb717467a22",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "da9614598250ea87",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3e9378b11cb23e8d",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8cfefc559615c687",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "hypercell.myvnc.com",
+        "port": "3306",
+        "db": "testNode",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "469e1d6199c5b98a",
+        "type": "kafka-broker",
+        "name": "kafkaHyperCell",
+        "hosts": "hypercell.myvnc.com:9092",
+        "selfsign": false,
+        "usetls": false,
+        "cacert": "",
+        "clientcert": "",
+        "privatekey": "",
+        "passphrase": ""
+    },
+    {
+        "id": "c0bd799bee3454c9",
+        "type": "inject",
+        "z": "02bc6bb717467a22",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 240,
+        "y": 120,
+        "wires": [
+            [
+                "36bcd75bbe6bc6e4"
+            ]
+        ]
+    },
+    {
+        "id": "f2f2b477f3b6f5cb",
+        "type": "debug",
+        "z": "02bc6bb717467a22",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "36bcd75bbe6bc6e4",
+        "type": "function",
+        "z": "02bc6bb717467a22",
+        "name": "function 1",
+        "func": "// Create a Date object from the payload\nvar date = new Date(msg.payload);\n// Change the payload to be a formatted Date string\nmsg.payload = date.toString();\n// Return the message so it can be sent on\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 120,
+        "wires": [
+            [
+                "f2f2b477f3b6f5cb"
+            ]
+        ]
+    },
+    {
+        "id": "5434e6bc114af06e",
+        "type": "inject",
+        "z": "da9614598250ea87",
+        "name": "Inject",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 310,
+        "y": 200,
+        "wires": [
+            [
+                "915bdf8e757650ec"
+            ]
+        ]
+    },
+    {
+        "id": "915bdf8e757650ec",
+        "type": "http request",
+        "z": "da9614598250ea87",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.csv",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 490,
+        "y": 200,
+        "wires": [
+            [
+                "3598d8e8b6d0397a"
+            ]
+        ]
+    },
+    {
+        "id": "3598d8e8b6d0397a",
+        "type": "csv",
+        "z": "da9614598250ea87",
+        "name": "",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 650,
+        "y": 200,
+        "wires": [
+            [
+                "90eeb2ef8a93b76d",
+                "14180ae7f60f2d68"
+            ]
+        ]
+    },
+    {
+        "id": "90eeb2ef8a93b76d",
+        "type": "debug",
+        "z": "da9614598250ea87",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "14180ae7f60f2d68",
+        "type": "switch",
+        "z": "da9614598250ea87",
+        "name": "",
+        "property": "payload.mag",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gte",
+                "v": "7",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 650,
+        "y": 300,
+        "wires": [
+            [
+                "68e43f62c24d9ff7"
+            ]
+        ]
+    },
+    {
+        "id": "68e43f62c24d9ff7",
+        "type": "change",
+        "z": "da9614598250ea87",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "PANIC!",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 820,
+        "y": 300,
+        "wires": [
+            [
+                "b310090422cc2f34"
+            ]
+        ]
+    },
+    {
+        "id": "b310090422cc2f34",
+        "type": "debug",
+        "z": "da9614598250ea87",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "34fc4b6ed77772f5",
+        "type": "mysql",
+        "z": "3e9378b11cb23e8d",
+        "mydb": "8cfefc559615c687",
+        "name": "test",
+        "x": 710,
+        "y": 140,
+        "wires": [
+            [
+                "bb230cbf1b398d2c"
+            ]
+        ]
+    },
+    {
+        "id": "9711e611cf8be5a7",
+        "type": "inject",
+        "z": "3e9378b11cb23e8d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[142]",
+        "payloadType": "json",
+        "x": 170,
+        "y": 80,
+        "wires": [
+            [
+                "1500600835fb5767"
+            ]
+        ]
+    },
+    {
+        "id": "bb230cbf1b398d2c",
+        "type": "debug",
+        "z": "3e9378b11cb23e8d",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "f75e574b8906189b",
+        "type": "kafka-producer",
+        "z": "3e9378b11cb23e8d",
+        "name": "",
+        "broker": "469e1d6199c5b98a",
+        "topic": "test_topic",
+        "requireAcks": 1,
+        "ackTimeoutMs": 100,
+        "attributes": 0,
+        "x": 380,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "e8c8614ae1ac68c1",
+        "type": "kafka-consumer",
+        "z": "3e9378b11cb23e8d",
+        "name": "",
+        "broker": "469e1d6199c5b98a",
+        "outOfRangeOffset": "earliest",
+        "fromOffset": "latest",
+        "topic": "test_topic",
+        "groupid": "",
+        "x": 720,
+        "y": 400,
+        "wires": [
+            [
+                "8def2da03a862e8f",
+                "89355fb37f978e02"
+            ]
+        ]
+    },
+    {
+        "id": "17f0ffd412b1e580",
+        "type": "debug",
+        "z": "3e9378b11cb23e8d",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "1500600835fb5767",
+        "type": "http request",
+        "z": "3e9378b11cb23e8d",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:8070/api/v1/questions/getColumnAliases",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "bearer",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 80,
+        "wires": [
+            [
+                "c4a2fe01c915fe2b"
+            ]
+        ]
+    },
+    {
+        "id": "863a4e786b16662d",
+        "type": "function",
+        "z": "3e9378b11cb23e8d",
+        "name": "function 3",
+        "func": "var sql = \"INSERT INTO test2 (name, alias) VALUES \";\nvar placeholders = [];\nvar values = [];\n\n// Loop over each object in the array to build placeholders and values\nmsg.payload.forEach(function(record) {\n    placeholders.push(\"(?, ?)\"); // Two placeholders for each pair of name and alias\n    values.push(record.name, record.alias); // Add both name and alias to the values array\n});\n\n// Complete SQL statement\nsql += placeholders.join(\", \");\n\n// Set the msg.topic to the SQL statement\nmsg.topic = sql;\n\n// Set the msg.payload to the array of values\nmsg.payload = values;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 220,
+        "wires": [
+            [
+                "34fc4b6ed77772f5"
+            ]
+        ]
+    },
+    {
+        "id": "8def2da03a862e8f",
+        "type": "debug",
+        "z": "3e9378b11cb23e8d",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "c4a2fe01c915fe2b",
+        "type": "function",
+        "z": "3e9378b11cb23e8d",
+        "name": "function 4",
+        "func": "msg.payload = JSON.stringify(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 320,
+        "wires": [
+            [
+                "f75e574b8906189b"
+            ]
+        ]
+    },
+    {
+        "id": "89355fb37f978e02",
+        "type": "function",
+        "z": "3e9378b11cb23e8d",
+        "name": "function 5",
+        "func": "// Assuming msg.payload.value is a JSON string\ntry {\n    var valueObject = JSON.parse(msg.payload.value);\n    msg.payload = valueObject;\n} catch (e) {\n    node.error(\"Error parsing JSON string: \" + e.message);\n    return null; \n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 300,
+        "wires": [
+            [
+                "17f0ffd412b1e580",
+                "863a4e786b16662d"
+            ]
+        ]
+    },
+    {
+        "id": "596dc91070c16eb6",
+        "type": "change",
+        "z": "3e9378b11cb23e8d",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 220,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    }
+]
