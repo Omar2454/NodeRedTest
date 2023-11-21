@@ -16,6 +16,14 @@
         "env": []
     },
     {
+        "id": "41ad1ea2ee8194fe",
+        "type": "tab",
+        "label": "Flow 4",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "3e9378b11cb23e8d",
         "type": "tab",
         "label": "Flow 3",
@@ -24,9 +32,17 @@
         "env": []
     },
     {
-        "id": "41ad1ea2ee8194fe",
+        "id": "13530439b3021375",
         "type": "tab",
-        "label": "Flow 4",
+        "label": "Flow 5",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7f5bfd9695060b10",
+        "type": "tab",
+        "label": "Flow 6",
         "disabled": false,
         "info": "",
         "env": []
@@ -168,6 +184,18 @@
         "width": "6",
         "collapse": false,
         "className": ""
+    },
+    {
+        "id": "40c2c99293fefdd7",
+        "type": "kafka-broker",
+        "name": "localkafka",
+        "hosts": "localhost:9092",
+        "selfsign": false,
+        "usetls": false,
+        "cacert": "",
+        "clientcert": "",
+        "privatekey": "",
+        "passphrase": ""
     },
     {
         "id": "c0bd799bee3454c9",
@@ -422,241 +450,6 @@
         "x": 780,
         "y": 420,
         "wires": []
-    },
-    {
-        "id": "34fc4b6ed77772f5",
-        "type": "mysql",
-        "z": "3e9378b11cb23e8d",
-        "mydb": "8cfefc559615c687",
-        "name": "test",
-        "x": 710,
-        "y": 140,
-        "wires": [
-            [
-                "bb230cbf1b398d2c"
-            ]
-        ]
-    },
-    {
-        "id": "9711e611cf8be5a7",
-        "type": "inject",
-        "z": "3e9378b11cb23e8d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "[143]",
-        "payloadType": "json",
-        "x": 170,
-        "y": 80,
-        "wires": [
-            [
-                "1500600835fb5767"
-            ]
-        ]
-    },
-    {
-        "id": "bb230cbf1b398d2c",
-        "type": "debug",
-        "z": "3e9378b11cb23e8d",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 940,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "f75e574b8906189b",
-        "type": "kafka-producer",
-        "z": "3e9378b11cb23e8d",
-        "name": "",
-        "broker": "469e1d6199c5b98a",
-        "topic": "test_topic",
-        "requireAcks": 1,
-        "ackTimeoutMs": 100,
-        "attributes": 0,
-        "x": 380,
-        "y": 400,
-        "wires": []
-    },
-    {
-        "id": "e8c8614ae1ac68c1",
-        "type": "kafka-consumer",
-        "z": "3e9378b11cb23e8d",
-        "name": "",
-        "broker": "469e1d6199c5b98a",
-        "outOfRangeOffset": "earliest",
-        "fromOffset": "latest",
-        "topic": "test_topic",
-        "groupid": "",
-        "x": 720,
-        "y": 400,
-        "wires": [
-            [
-                "8def2da03a862e8f",
-                "89355fb37f978e02"
-            ]
-        ]
-    },
-    {
-        "id": "17f0ffd412b1e580",
-        "type": "debug",
-        "z": "3e9378b11cb23e8d",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 920,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "1500600835fb5767",
-        "type": "http request",
-        "z": "3e9378b11cb23e8d",
-        "name": "",
-        "method": "POST",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "http://localhost:8070/api/v1/questions/getColumnAliases",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "bearer",
-        "senderr": false,
-        "headers": [],
-        "x": 430,
-        "y": 80,
-        "wires": [
-            [
-                "c4a2fe01c915fe2b"
-            ]
-        ]
-    },
-    {
-        "id": "863a4e786b16662d",
-        "type": "function",
-        "z": "3e9378b11cb23e8d",
-        "name": "function 3",
-        "func": "var sql = \"INSERT INTO test2 (name, alias) VALUES \";\nvar placeholders = [];\nvar values = [];\n\n// Loop over each object in the array to build placeholders and values\nmsg.payload.forEach(function(record) {\n    placeholders.push(\"(?, ?)\"); // Two placeholders for each pair of name and alias\n    values.push(record.name, record.alias); // Add both name and alias to the values array\n});\n\n// Complete SQL statement\nsql += placeholders.join(\", \");\n\n// Set the msg.topic to the SQL statement\nmsg.topic = sql;\n\n// Set the msg.payload to the array of values\nmsg.payload = values;\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 720,
-        "y": 220,
-        "wires": [
-            [
-                "34fc4b6ed77772f5"
-            ]
-        ]
-    },
-    {
-        "id": "8def2da03a862e8f",
-        "type": "debug",
-        "z": "3e9378b11cb23e8d",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 920,
-        "y": 400,
-        "wires": []
-    },
-    {
-        "id": "c4a2fe01c915fe2b",
-        "type": "function",
-        "z": "3e9378b11cb23e8d",
-        "name": "function 4",
-        "func": "msg.payload = JSON.stringify(msg.payload);\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 380,
-        "y": 320,
-        "wires": [
-            [
-                "f75e574b8906189b"
-            ]
-        ]
-    },
-    {
-        "id": "89355fb37f978e02",
-        "type": "function",
-        "z": "3e9378b11cb23e8d",
-        "name": "function 5",
-        "func": "// Assuming msg.payload.value is a JSON string\ntry {\n    var valueObject = JSON.parse(msg.payload.value);\n    msg.payload = valueObject;\n} catch (e) {\n    node.error(\"Error parsing JSON string: \" + e.message);\n    return null; \n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 720,
-        "y": 300,
-        "wires": [
-            [
-                "17f0ffd412b1e580",
-                "863a4e786b16662d"
-            ]
-        ]
-    },
-    {
-        "id": "596dc91070c16eb6",
-        "type": "change",
-        "z": "3e9378b11cb23e8d",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 220,
-        "y": 180,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "da81f729977260b4",
@@ -996,6 +789,526 @@
         "statusType": "auto",
         "x": 440,
         "y": 280,
+        "wires": []
+    },
+    {
+        "id": "34fc4b6ed77772f5",
+        "type": "mysql",
+        "z": "3e9378b11cb23e8d",
+        "d": true,
+        "mydb": "8cfefc559615c687",
+        "name": "test",
+        "x": 730,
+        "y": 100,
+        "wires": [
+            [
+                "bb230cbf1b398d2c"
+            ]
+        ]
+    },
+    {
+        "id": "9711e611cf8be5a7",
+        "type": "inject",
+        "z": "3e9378b11cb23e8d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[143]",
+        "payloadType": "json",
+        "x": 170,
+        "y": 80,
+        "wires": [
+            [
+                "1500600835fb5767"
+            ]
+        ]
+    },
+    {
+        "id": "bb230cbf1b398d2c",
+        "type": "debug",
+        "z": "3e9378b11cb23e8d",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "f75e574b8906189b",
+        "type": "kafka-producer",
+        "z": "3e9378b11cb23e8d",
+        "d": true,
+        "name": "",
+        "broker": "40c2c99293fefdd7",
+        "topic": "test_topic",
+        "requireAcks": 1,
+        "ackTimeoutMs": 100,
+        "attributes": 0,
+        "x": 380,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "e8c8614ae1ac68c1",
+        "type": "kafka-consumer",
+        "z": "3e9378b11cb23e8d",
+        "d": true,
+        "name": "",
+        "broker": "40c2c99293fefdd7",
+        "outOfRangeOffset": "earliest",
+        "fromOffset": "latest",
+        "topic": "test_topic",
+        "groupid": "",
+        "x": 720,
+        "y": 400,
+        "wires": [
+            [
+                "8def2da03a862e8f",
+                "89355fb37f978e02"
+            ]
+        ]
+    },
+    {
+        "id": "17f0ffd412b1e580",
+        "type": "debug",
+        "z": "3e9378b11cb23e8d",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "1500600835fb5767",
+        "type": "http request",
+        "z": "3e9378b11cb23e8d",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:8070/api/v1/questions/getColumnAliases",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "bearer",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 80,
+        "wires": [
+            [
+                "c4a2fe01c915fe2b"
+            ]
+        ]
+    },
+    {
+        "id": "863a4e786b16662d",
+        "type": "function",
+        "z": "3e9378b11cb23e8d",
+        "name": "function 3",
+        "func": "var sql = \"INSERT INTO test2 (name, alias) VALUES \";\nvar placeholders = [];\nvar values = [];\n\n// Loop over each object in the array to build placeholders and values\nmsg.payload.forEach(function(record) {\n    placeholders.push(\"(?, ?)\"); // Two placeholders for each pair of name and alias\n    values.push(record.name, record.alias); // Add both name and alias to the values array\n});\n\n// Complete SQL statement\nsql += placeholders.join(\", \");\n\n// Set the msg.topic to the SQL statement\nmsg.topic = sql;\n\n// Set the msg.payload to the array of values\nmsg.payload = values;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 220,
+        "wires": [
+            [
+                "34fc4b6ed77772f5"
+            ]
+        ]
+    },
+    {
+        "id": "8def2da03a862e8f",
+        "type": "debug",
+        "z": "3e9378b11cb23e8d",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "c4a2fe01c915fe2b",
+        "type": "function",
+        "z": "3e9378b11cb23e8d",
+        "name": "function 4",
+        "func": "msg.payload = JSON.stringify(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 320,
+        "wires": [
+            [
+                "f75e574b8906189b"
+            ]
+        ]
+    },
+    {
+        "id": "89355fb37f978e02",
+        "type": "function",
+        "z": "3e9378b11cb23e8d",
+        "name": "function 5",
+        "func": "// Assuming msg.payload.value is a JSON string\ntry {\n    var valueObject = JSON.parse(msg.payload.value);\n    msg.payload = valueObject;\n} catch (e) {\n    node.error(\"Error parsing JSON string: \" + e.message);\n    return null; \n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 300,
+        "wires": [
+            [
+                "17f0ffd412b1e580",
+                "863a4e786b16662d"
+            ]
+        ]
+    },
+    {
+        "id": "596dc91070c16eb6",
+        "type": "change",
+        "z": "3e9378b11cb23e8d",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 220,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "187d727cde4e04af",
+        "type": "mysql",
+        "z": "13530439b3021375",
+        "mydb": "8cfefc559615c687",
+        "name": "test",
+        "x": 470,
+        "y": 220,
+        "wires": [
+            [
+                "4f3a8ea549635c08",
+                "7faabb7e814e79bc"
+            ]
+        ]
+    },
+    {
+        "id": "4db0b49988abb880",
+        "type": "cronplus",
+        "z": "13530439b3021375",
+        "name": "",
+        "outputField": "payload",
+        "timeZone": "",
+        "storeName": "",
+        "commandResponseMsgOutput": "output1",
+        "defaultLocation": "",
+        "defaultLocationType": "default",
+        "outputs": 1,
+        "options": [
+            {
+                "name": "schedule1",
+                "topic": "topic1",
+                "payloadType": "str",
+                "payload": "family1",
+                "expressionType": "cron",
+                "expression": "0 22 * * *",
+                "location": "",
+                "offset": "0",
+                "solarType": "all",
+                "solarEvents": "sunrise,sunset"
+            }
+        ],
+        "x": 120,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6d719d424f8104bb",
+        "type": "function",
+        "z": "13530439b3021375",
+        "name": "function 12",
+        "func": "msg.topic = `select * from testNode.test where \\`group\\` ='${msg.payload}'`;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 220,
+        "wires": [
+            [
+                "187d727cde4e04af"
+            ]
+        ]
+    },
+    {
+        "id": "38a4a4674efd45b9",
+        "type": "inject",
+        "z": "13530439b3021375",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "family1",
+        "payloadType": "str",
+        "x": 110,
+        "y": 220,
+        "wires": [
+            [
+                "6d719d424f8104bb"
+            ]
+        ]
+    },
+    {
+        "id": "4f3a8ea549635c08",
+        "type": "debug",
+        "z": "13530439b3021375",
+        "name": "debug 11",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "89a89bb85dd55865",
+        "type": "kafka-producer",
+        "z": "13530439b3021375",
+        "name": "",
+        "broker": "40c2c99293fefdd7",
+        "topic": "test-topic",
+        "requireAcks": 1,
+        "ackTimeoutMs": 100,
+        "attributes": 0,
+        "x": 520,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "1ebef39b4a8d325b",
+        "type": "function",
+        "z": "13530439b3021375",
+        "name": "function 13",
+        "func": "msg.payload = JSON.stringify(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 270,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7faabb7e814e79bc",
+        "type": "function",
+        "z": "13530439b3021375",
+        "name": "function 14",
+        "func": "const results = msg.payload;\nif (Array.isArray(results)) {\n    const messages = results.map(result => {\n        return { payload: JSON.stringify(result) };\n    });\n    return [messages];\n} else {\n    node.error(\"Results are not in an array format\");\n    return null; // Stop the flow\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 300,
+        "wires": [
+            [
+                "78886fff8f0ddd9e",
+                "89a89bb85dd55865"
+            ]
+        ]
+    },
+    {
+        "id": "78886fff8f0ddd9e",
+        "type": "debug",
+        "z": "13530439b3021375",
+        "name": "debug 12",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "e6c4f1dd7527b8ab",
+        "type": "kafka-consumer",
+        "z": "7f5bfd9695060b10",
+        "name": "",
+        "broker": "40c2c99293fefdd7",
+        "outOfRangeOffset": "earliest",
+        "fromOffset": "latest",
+        "topic": "test-topic",
+        "groupid": "",
+        "x": 200,
+        "y": 100,
+        "wires": [
+            [
+                "de910ef09dae0d9d"
+            ]
+        ]
+    },
+    {
+        "id": "e076f98212305178",
+        "type": "debug",
+        "z": "7f5bfd9695060b10",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "de910ef09dae0d9d",
+        "type": "function",
+        "z": "7f5bfd9695060b10",
+        "name": "function 15",
+        "func": "try {\n    msg.payload = JSON.parse(msg.payload.value);\n    return msg;\n} catch (e) {\n    node.error(\"Error parsing JSON\", e);\n    return null; // Stop the flow if there's an error\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 100,
+        "wires": [
+            [
+                "e076f98212305178",
+                "da031b9ea047d63c"
+            ]
+        ]
+    },
+    {
+        "id": "da031b9ea047d63c",
+        "type": "function",
+        "z": "7f5bfd9695060b10",
+        "name": "function 16",
+        "func": "// Assuming msg.payload is the object received from Kafka\nconst record = msg.payload;\n\nif (record && record.id) {\n    msg.topic = `UPDATE testNode.test SET status = 'Successful' WHERE id = ${record.id}`;\n    return msg;\n} else {\n    node.error(\"Invalid record\");\n    return null; // Stop the flow if the record is invalid\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 220,
+        "wires": [
+            [
+                "5a33f9496d816cbc"
+            ]
+        ]
+    },
+    {
+        "id": "5a33f9496d816cbc",
+        "type": "mysql",
+        "z": "7f5bfd9695060b10",
+        "mydb": "8cfefc559615c687",
+        "name": "test",
+        "x": 770,
+        "y": 220,
+        "wires": [
+            [
+                "8b06999fb7e3e294"
+            ]
+        ]
+    },
+    {
+        "id": "8b06999fb7e3e294",
+        "type": "debug",
+        "z": "7f5bfd9695060b10",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 220,
         "wires": []
     }
 ]
